@@ -28,7 +28,7 @@ func (o onesignalMessenger) Name() string {
 // Push sends the sms through onesignal API.
 func (p onesignalMessenger) Push(msg Message) error {
 
-
+    return nil
 }
 
 
