@@ -7,6 +7,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/HiWay-Media/listmonk-onesignal/lib"
 	"github.com/francoispqt/onelog"
 	"github.com/go-chi/chi"
 	"github.com/knadh/koanf"
@@ -24,11 +25,15 @@ var (
 	buildString = "unknown"
 )
 
-
 type Cfg struct {
 	Config string `koanf:"config"`
 }
 
+type App struct {
+	logger *onelog.Logger
+
+	messengers map[string]lib.Messenger
+}
 
 func init() {
 	f := flag.NewFlagSet("config", flag.ContinueOnError)
@@ -81,8 +86,8 @@ func main() {
 
 	// load messengers
 	app := &App{logger: l}
-    r := chi.NewRouter()
-	//r.Post("/webhook/{provider}", wrap(app, handlePostback))
+	r := chi.NewRouter()
+	r.Post("/webhook/{provider}", wrap(app, handlePostback))
 
 	// HTTP Server.
 	srv := &http.Server{
