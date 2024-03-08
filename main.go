@@ -86,7 +86,7 @@ func main() {
 
 	// load messengers
 	app := &App{logger: l}
-    app.onesignal = lib.NewOneSignal([]byte(cfg.Config), app.logger)
+    //app.onesignal = lib.NewOneSignal([]byte(cfg.Config), app.logger)
     //
 	r := chi.NewRouter()
 	r.Post("/webhook/{provider}", wrap(app, handlePostback))
