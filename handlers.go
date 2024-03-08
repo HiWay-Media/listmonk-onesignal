@@ -74,11 +74,12 @@ func handlePostback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get the provider.
-	p, ok := app.messengers[provider]
+	/*p, ok := app.messengers[provider]
+	//p, ok := app.onesignal
 	if !ok {
 		sendErrorResponse(w, "unknown provider", http.StatusBadRequest, nil)
 		return
-	}
+	}*/
 
 	if len(data.Recipients) > 1 {
 		sendErrorResponse(w, "invalid recipients", http.StatusBadRequest, nil)
@@ -127,14 +128,14 @@ func handlePostback(w http.ResponseWriter, r *http.Request) {
 	app.logger.DebugWith("sending message").String("provider", provider).String("message", fmt.Sprintf("%#+v", message)).Write()
 
 	// Send message.
-	if err := p.Push(message); err != nil {
+	if err := app.onesignal.Push(message); err != nil {
 		app.logger.ErrorWith("error sending message").Err("err", err).Write()
 		sendErrorResponse(w, "error sending message", http.StatusInternalServerError, nil)
 		return
 	}
 
 	sendResponse(w, "OK")
-	return
+	//return
 }
 
 // wrap is a middleware that wraps HTTP handlers and injects the "app" context.
