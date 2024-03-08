@@ -2,9 +2,9 @@ name: Docker Listmonk Onesignal
 #
 on:
   push:
-    branches: 
-      - master
-      - main
+    #branches: 
+    #  - master
+    #  - main
     tags:
       - '*'
 #

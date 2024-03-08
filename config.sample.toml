@@ -1,0 +1,6 @@
+log_level="info"
+
+[server]
+address = ":8082"
+read_timeout = "5s"
+write_timeout = "5s"
