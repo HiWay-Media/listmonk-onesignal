@@ -1,7 +1,8 @@
 package lib
 
 import (
-
+	"encoding/json"
+	"fmt"
 	"github.com/francoispqt/onelog"
 )
 
