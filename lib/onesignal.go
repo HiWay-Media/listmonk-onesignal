@@ -42,9 +42,13 @@ func (p onesignalMessenger) Close() error {
 
 // NewOneSignal creates new instance of pinpoint
 func NewOneSignal(cfg []byte, l *onelog.Logger) (Messenger, error) {
-    var c pinpointCfg
+    var c onesignalCfg
 	if err := json.Unmarshal(cfg, &c); err != nil {
 		return nil, err
+	}
+
+	if c.AppID == "" {
+		return nil, fmt.Errorf("invalid app_id")
 	}
     //
     return onesignalMessenger{
