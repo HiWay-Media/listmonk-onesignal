@@ -30,9 +30,9 @@ type Cfg struct {
 }
 
 type App struct {
-	logger *onelog.Logger
-
-	messengers map[string]lib.Messenger
+	logger      *onelog.Logger
+    onesignal   lib.Messenger
+	//messengers map[string]lib.Messenger
 }
 
 func init() {
@@ -86,6 +86,8 @@ func main() {
 
 	// load messengers
 	app := &App{logger: l}
+    app.onesignal = lib.NewOneSignal([]byte(cfg.Config), app.logger)
+    //
 	r := chi.NewRouter()
 	r.Post("/webhook/{provider}", wrap(app, handlePostback))
 
