@@ -1,9 +1,11 @@
 package lib
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 
+	"github.com/OneSignal/onesignal-go-api"
 	"github.com/francoispqt/onelog"
 )
 
@@ -16,18 +18,23 @@ type onesignalCfg struct {
 }
 
 type onesignalMessenger struct {
-	cfg onesignalCfg
-
+	cfg    onesignalCfg
 	logger *onelog.Logger
+	ctx    context.Context
 }
 
 func (o onesignalMessenger) Name() string {
 	return "onesignal"
 }
 
-// Push sends the sms through onesignal API.
+// Push sends the email through onesignal API.
 func (p onesignalMessenger) Push(msg Message) error {
-
+	email, ok := msg.Subscriber.Attribs["email"].(string)
+	if !ok {
+		return fmt.Errorf("could not find subscriber phone")
+	}
+	p.logger.InfoWith("sending onesignal message" + email).Write()
+	//
 	return nil
 }
 
@@ -49,9 +56,11 @@ func NewOneSignal(cfg []byte, l *onelog.Logger) (Messenger, error) {
 	if c.AppID == "" {
 		return nil, fmt.Errorf("invalid app_id")
 	}
+	ctx := context.WithValue(context.Background(), onesignal.AppAuth, c.AppID)
 	//
 	return onesignalMessenger{
 		cfg:    c,
 		logger: l,
+		ctx:    ctx,
 	}, nil
 }
